@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  oracle-db:
+    image: gvenzl/oracle-xe:21-slim
+    environment:
+      ORACLE_PASSWORD: oracle
+      APP_USER: SIMAPP
+      APP_USER_PASSWORD: SIMAPP
+    volumes:
+      - ./oracle-db/init:/container-entrypoint-initdb.d
+    ports:
+      - "1521:1521"
+
+  sim-api:
+    build: ./sim-api
+    ports:
+      - "8080:8080"
+    depends_on:
+      - oracle-db
